@@ -1,0 +1,105 @@
+{
+  "$schema": "https://raw.githubusercontent.com/vicinaehq/vicinae/refs/heads/main/extra/schemas/extension.json",
+  "name": "notes",
+  "title": "Notes",
+  "description": "Search markdown notes with ease",
+  "categories": [],
+  "license": "MIT",
+  "author": "timster",
+  "contributors": [],
+  "pastContributors": [],
+  "icon": "extension_icon.png",
+  "commands": [
+    {
+      "name": "search-notes",
+      "title": "Search Notes",
+      "description": "Search for notes",
+      "mode": "view"
+    },
+    {
+      "name": "search-snippets",
+      "title": "Search Snippets",
+      "description": "Search for snippets",
+      "mode": "view"
+    },
+    {
+      "name": "create-note",
+      "title": "Create Note",
+      "description": "Create a new markdown note",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "title",
+          "placeholder": "Note title",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "create-meeting-note",
+      "title": "Create Meeting Note",
+      "description": "Create a new meeting note for today",
+      "mode": "no-view",
+      "arguments": [
+        {
+          "name": "title",
+          "placeholder": "Meeting title",
+          "type": "text",
+          "required": true
+        }
+      ]
+    },
+    {
+      "name": "open-daily-note",
+      "title": "Open Daily Note",
+      "description": "Open today's daily note, creating it if it doesn't exist",
+      "mode": "no-view"
+    },
+    {
+      "name": "open-tasks",
+      "title": "Open Current Tasks",
+      "description": "Open current tasks in VS Code",
+      "mode": "no-view"
+    }
+  ],
+  "preferences": [
+    {
+      "name": "notesDirectory",
+      "type": "textfield",
+      "required": true,
+      "title": "Notes Directory",
+      "description": "Directory containing your markdown notes",
+      "placeholder": "/Users/tim/Documents/Notes"
+    },
+    {
+      "name": "splunkSearchUrl",
+      "type": "textfield",
+      "required": true,
+      "title": "Splunk Search URL",
+      "description": "URL for Splunk search endpoint",
+      "placeholder": "https://client.splunkcloud.com/en-US/app/search/search?q="
+    },
+    {
+      "name": "querySearchUrl",
+      "type": "textfield",
+      "required": true,
+      "title": "Query Search URL",
+      "description": "URL for SQL search endpoint",
+      "placeholder": "https://admin.example.com/console?sql="
+    }
+  ],
+  "scripts": {
+    "build": "vici build",
+    "dev": "vici develop",
+    "format": "biome format --write src",
+    "lint": "vici lint"
+  },
+  "dependencies": {
+    "@vicinae/api": "^0.28.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "@biomejs/biome": "2.3.2"
+  }
+}
