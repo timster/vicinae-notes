@@ -1,45 +1,33 @@
 import { dirname, join, relative } from "path";
-import { mkdir, readdir, readFile, writeFile } from "fs/promises";
+import { readdir, readFile } from "fs/promises";
 import { execFile } from "child_process";
 import { useEffect, useState } from "react";
 
-import { closeMainWindow, getPreferenceValues, showToast, Toast } from "@vicinae/api";
+import { closeMainWindow, getPreferenceValues } from "@vicinae/api";
 
-const CODE_PATH = "/opt/homebrew/bin/code";
-
-export function openNoteInVSCode(notePath: string): void {
-  const { notesDirectory } = getPreferenceValues<Preferences>();
-  const absolutePath = join(notesDirectory!, `${notePath}.md`);
-  execFile(CODE_PATH, [notesDirectory!, "--goto", absolutePath]);
+function openJetfold(path: string, params: Record<string, string> = {}): void {
+  const query = Object.entries(params)
+    .map(([k, v]) => `${k}=${encodeURIComponent(v)}`)
+    .join("&");
+  execFile("open", [`jetfold://${path}${query ? `?${query}` : ""}`]);
   closeMainWindow();
 }
 
-async function createNoteAtPath(notePath: string): Promise<void> {
-  try {
-    const { notesDirectory } = getPreferenceValues<Preferences>();
-    const filePath = join(notesDirectory!, `${notePath}.md`);
-    await mkdir(dirname(filePath), { recursive: true });
-    await writeFile(filePath, "", { flag: "a" });
-    openNoteInVSCode(notePath);
-  } catch (err: unknown) {
-    await showToast({ style: Toast.Style.Failure, title: "Failed to create note", message: String(err) });
-  }
+export function openNote(notePath: string, create = false): void {
+  openJetfold("open", create ? { note: notePath, create: "true" } : { note: notePath });
 }
 
 export async function createNote(title: string): Promise<void> {
-  await createNoteAtPath(makeSafeNoteName(title));
+  openNote(makeSafeNoteName(title), true);
 }
 
 export async function createMeetingNote(title: string): Promise<void> {
   const date = new Date().toISOString().slice(0, 10);
-  const safeName = makeSafeNoteName(title);
-  await createNoteAtPath(`meetings/${date} - ${safeName}`);
+  openNote(`meetings/${date} - ${makeSafeNoteName(title)}`, true);
 }
 
 export async function openDailyNote(): Promise<void> {
-  const date = new Date().toISOString().slice(0, 10);
-  const year = date.slice(0, 4);
-  await createNoteAtPath(`daily/${year}/${date}`);
+  openJetfold("daily");
 }
 
 export type Note = {

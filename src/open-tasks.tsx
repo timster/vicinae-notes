@@ -1,5 +1,5 @@
-import { openNoteInVSCode } from "./utils";
+import { openNote } from "./utils";
 
 export default function OpenTasksCommand() {
-  openNoteInVSCode("Current Tasks");
+  openNote("Current Tasks");
 }

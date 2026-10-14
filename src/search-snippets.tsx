@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ActionPanel, List, Action, Icon, getPreferenceValues } from "@vicinae/api";
 
-import { searchSnippets, useSnippets, openNoteInVSCode } from "./utils";
+import { searchSnippets, useSnippets, openNote } from "./utils";
 
 export default function SearchSnippetsCommand() {
   const { querySearchUrl, splunkSearchUrl } = getPreferenceValues<ExtensionPreferences>();
@@ -43,7 +43,7 @@ export default function SearchSnippetsCommand() {
               {snippet.language !== "sql" && (
                 <Action.OpenInBrowser title="Open in Splunk" url={getSplunkUrl(snippet.content)} />
               )}
-              <Action title="Open Note" onAction={() => openNoteInVSCode(snippet.path)} icon={Icon.Code} />
+              <Action title="Open Note" onAction={() => openNote(snippet.path)} icon={Icon.Code} />
             </ActionPanel>
           }
         />

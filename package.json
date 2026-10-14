@@ -59,7 +59,7 @@
     {
       "name": "open-tasks",
       "title": "Open Current Tasks",
-      "description": "Open current tasks in VS Code",
+      "description": "Open current tasks",
       "mode": "no-view"
     }
   ],

@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { ActionPanel, List, Action, Icon } from "@vicinae/api";
 
-import { useNotes, searchNotes, openNoteInVSCode } from "./utils";
+import { useNotes, searchNotes, openNote } from "./utils";
 
 export default function SearchNotesCommand() {
   const { data: notes, isLoading } = useNotes();
@@ -26,7 +26,7 @@ export default function SearchNotesCommand() {
           detail={<List.Item.Detail markdown={note.markdown} />}
           actions={
             <ActionPanel>
-              <Action title="Open Note" onAction={() => openNoteInVSCode(note.path)} icon={Icon.Code} />
+              <Action title="Open Note" onAction={() => openNote(note.path)} icon={Icon.Code} />
             </ActionPanel>
           }
         />
