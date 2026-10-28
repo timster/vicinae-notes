@@ -4,7 +4,7 @@ import { ActionPanel, List, Action, Icon, getPreferenceValues } from "@vicinae/a
 import { searchSnippets, useSnippets, openNote } from "./utils";
 
 export default function SearchSnippetsCommand() {
-  const { querySearchUrl, splunkSearchUrl } = getPreferenceValues<ExtensionPreferences>();
+  const { querySearchUrl, splunkSearchUrl, chronosphereUrl } = getPreferenceValues<ExtensionPreferences>();
 
   const { data: snippets, isLoading } = useSnippets();
 
@@ -18,6 +18,22 @@ export default function SearchSnippetsCommand() {
 
   function getQueryUrl(query: string) {
     return `${querySearchUrl}${encodeURIComponent(query)}`;
+  }
+
+  function getChronosphereUrl(query: string) {
+    const queries = [
+      {
+        kind: "DataQuery",
+        spec: { plugin: { kind: "PrometheusTimeSeriesQuery", spec: { query } }, id: "0" },
+      },
+    ];
+    const params = [
+      "start=now-1h",
+      "end=now",
+      `formulas=${encodeURIComponent("[]")}`,
+      `queries=${encodeURIComponent(JSON.stringify(queries))}`,
+    ];
+    return `${chronosphereUrl}/metrics/explorer-v2?${params.join("&")}`;
   }
 
   return (
@@ -40,8 +56,11 @@ export default function SearchSnippetsCommand() {
               {snippet.language === "sql" && (
                 <Action.OpenInBrowser title="Open in SQL Console" url={getQueryUrl(snippet.content)} />
               )}
-              {snippet.language !== "sql" && (
+              {snippet.language === "splunk" && (
                 <Action.OpenInBrowser title="Open in Splunk" url={getSplunkUrl(snippet.content)} />
+              )}
+              {snippet.language === "promql" && (
+                <Action.OpenInBrowser title="Open in Chronosphere" url={getChronosphereUrl(snippet.content)} />
               )}
               <Action title="Open Note" onAction={() => openNote(snippet.path)} icon={Icon.Code} />
             </ActionPanel>

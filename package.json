@@ -87,6 +87,14 @@
       "title": "Query Search URL",
       "description": "URL for SQL search endpoint",
       "placeholder": "https://admin.example.com/console?sql="
+    },
+    {
+      "name": "chronosphereUrl",
+      "type": "textfield",
+      "required": true,
+      "title": "Chronosphere URL",
+      "description": "Base URL for your Chronosphere tenant",
+      "placeholder": "https://client.chronosphere.io"
     }
   ],
   "scripts": {
